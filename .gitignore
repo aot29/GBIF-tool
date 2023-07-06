@@ -1,0 +1,3 @@
+# Exclude files produced by sbt
+.bsp/
+target/
