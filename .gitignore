@@ -1,3 +1,5 @@
 # Exclude files produced by sbt
 .bsp/
 target/
+.idea
+src/test/data/output.csv
