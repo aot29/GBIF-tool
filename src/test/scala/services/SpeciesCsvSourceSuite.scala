@@ -48,7 +48,6 @@ class SpeciesCsvSourceSuite extends munit.FunSuite:
       SpeciesCsvSource(separator).listSpecies(inputPath),
       timeout)
     for species <- speciesList do
-      assert(species.latinName.nonEmpty)
       assert(species.genus.nonEmpty)
       assert(species.familia.nonEmpty)
       assert(species.ordo.nonEmpty)

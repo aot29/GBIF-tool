@@ -91,6 +91,9 @@ from the reviewers:
 
 
 - Where are the unit tests? List the unit test files.
+ 
+  _I had to mark the `conf` dir as "Resources root" to get the tests to work in IntelliJ_
+  
   Unit test are in `src/main/test/scala`:
     * `GbifToolControllerSuite` tests command-line parameters
     * `GbifServiceSuite`, `GbifParserSuite` tests the requests to - and responses from - the API, and parsing the JSON received from the API
@@ -99,6 +102,7 @@ from the reviewers:
     
 
 - What is the domain model? Give links to the relevant Scala source files.
+
   The domain model is in `src/main/scala/models`
     * `Species` class models a species data as obtained from GBIF or from a CSV file, so the constructor is overloaded.
     * `TaxonomicStatus` is an enum used in Species to mark the status of this species check (ACCEPTED, SYNONYM, UNKNOWN...)

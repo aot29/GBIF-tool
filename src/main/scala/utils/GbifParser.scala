@@ -2,7 +2,7 @@ package utils
 
 import errors.{SpeciesSynonymError, SpeciesUnknownError}
 import models.Types.{JSON, ValidatedSpecies}
-import models.{Species, TaxonomicStatus}
+import models.{Species, Taxon, TaxonomicStatus}
 import play.api.libs.json
 import play.api.libs.json.{JsObject, JsValue}
 

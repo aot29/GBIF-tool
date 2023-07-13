@@ -1,7 +1,7 @@
 package services
 
 import com.typesafe.config.ConfigFactory
-import models.Species
+import models.{Binomial, Species}
 import models.Types.JSON
 import requests.Response
 
@@ -50,13 +50,13 @@ class GbifService(endpoint: String, maxAttempts: Int) extends TaxonomyService:
    * @param name
    * @return JSON string
    */
-  protected def getApiResponse(name: String): Future[JSON] =
+  protected def getApiResponse(name: Binomial): Future[JSON] =
     Future {
       // request parameters sent to the API
       val params = Map(
         "verbose" -> "true",
         "kingdom" -> "Animalia", // only search for animals (to avoid confusion as some plants and animals have the same latin name)
-        "name" -> name // the latin name requested
+        "name" -> name.toString // the latin name requested
       )
       val response = requests.get(endpoint, params = params)
       response.text()

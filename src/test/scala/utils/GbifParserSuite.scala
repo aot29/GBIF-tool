@@ -2,7 +2,7 @@ package utils
 
 import errors.{SpeciesSynonymError, SpeciesUnknownError, SpeciesValidationError}
 import models.Types.{JSON, ValidatedSpecies}
-import models.{Species, TaxonomicStatus}
+import models.{Species, Taxon, TaxonomicStatus}
 
 class GbifParserSuite extends munit.FunSuite:
   /** Some example GBIF responses for testing */
@@ -48,12 +48,11 @@ class GbifParserSuite extends munit.FunSuite:
     for (example <- gbifResponseExamples)
       parser.parse(example) match
         case Right(value) =>
-          assert(value.latinName.nonEmpty)
-          assert(example.contains(value.latinName))
+          assert(example.contains(value.latinName.toString))
         case Left(ex) => // skip
   }
 
-  test("GBIF id name in parsed result should be present in the json") {
+  test("GBIF id in parsed result should be present in the json") {
     val parser = new GbifParser()
     for (example <- gbifResponseExamples)
       parser.parse(example) match
@@ -68,9 +67,9 @@ class GbifParserSuite extends munit.FunSuite:
     for (example <- gbifResponseExamples)
       parser.parse(example) match
         case Right(species) =>
-          if species.genus.isEmpty then assert(!example.contains("genus"))
-          if species.familia.isEmpty then assert(!example.contains("family"))
-          if species.ordo.isEmpty then assert(!example.contains("order"))
+          if species.genus == Taxon.empty then assert(!example.contains("genus"))
+          if species.familia == Taxon.empty then assert(!example.contains("family"))
+          if species.ordo == Taxon.empty then assert(!example.contains("order"))
         case Left(ex) =>  // skip
   }
 

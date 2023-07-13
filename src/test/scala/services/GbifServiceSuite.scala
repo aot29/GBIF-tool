@@ -3,7 +3,7 @@ package services
 import com.typesafe.config.ConfigFactory
 import controllers.GbifToolController.{config, maxAttempts}
 import models.Types.JSON
-import models.{Species, TaxonomicStatus}
+import models.{Binomial, Species, TaxonomicStatus}
 
 import concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Await
@@ -44,7 +44,7 @@ class GbifServiceSuite extends munit.FunSuite:
       val response: JSON = Await.result(
         GbifService(endpoint, maxAttempts).matchSpecies(species),
         timeout)
-      assert(response.contains(species.latinName))
+      assert(response.contains(species.latinName.toString))
   }
 
   test("Matching the same species should return the same JSON") {
@@ -59,7 +59,7 @@ class GbifServiceSuite extends munit.FunSuite:
   }
 
   test("Matching different species should return different JSON") {
-    var responses = scala.collection.mutable.HashMap.empty[String, JSON]
+    var responses = scala.collection.mutable.HashMap.empty[Binomial, JSON]
     for species <- speciesExamples do
       val json: JSON = Await.result(
         GbifService(endpoint, maxAttempts).matchSpecies(species),
@@ -68,7 +68,7 @@ class GbifServiceSuite extends munit.FunSuite:
     for responseA <- responses do
       for responseB <- responses do
         if responseA._1 != responseB._1 then // species names are different
-          assert(responseA._2 != responseB._2) // content is different
+          assert(responseA._2 != responseB._2) // JSON content is different
   }
 
   test("Matching a list of species should return a list of the same length") {
