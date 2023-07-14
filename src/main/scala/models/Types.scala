@@ -8,3 +8,4 @@ object Types {
   type FilePath = String
   type ValidatedSpecies = Either[SpeciesValidationError, Species]
 }
+

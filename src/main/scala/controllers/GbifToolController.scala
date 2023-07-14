@@ -1,6 +1,6 @@
 package controllers
 
-import models.{Species, Summary}
+import models.{Binomial, Species, Summary}
 
 import scala.util.{Failure, Success, Try}
 import scala.util.control.NonFatal
@@ -43,8 +43,6 @@ object GbifToolController:
     new GbifService(config.getString("GBIF_URL_SPECIES_ENDPOINT"), maxAttempts)
   /** Parser used to parse the Json response from GBIF */
   protected val gbifParser: ValidatingSpeciesParser = new GbifParser()
-
-
 
   @main
   def main(params: String*): Unit =

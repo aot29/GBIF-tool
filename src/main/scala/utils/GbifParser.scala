@@ -67,7 +67,8 @@ class GbifParser extends ValidatingSpeciesParser:
       parseGenus(jsonVal).getOrElse(""),
       parseFamilia(jsonVal).getOrElse(""),
       parseOrdo(jsonVal).getOrElse(""),
-      gbifKey
+      gbifKey,
+      jsonVal.toString
     )
 
   /**

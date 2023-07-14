@@ -1,7 +1,10 @@
 package models
 
+import models.Types.JSON
+
 /**
  * Status taken from GBIF
+ *
  * @see: https://gbif.github.io/gbif-api/apidocs/org/gbif/api/vocabulary/TaxonomicStatus.html
  * */
 enum TaxonomicStatus:
@@ -43,26 +46,27 @@ class Species(
    val genus: Taxon,
    val familia: Taxon,
    val ordo: Taxon,
-   val GbifUsageKey: GbifUsageKey
+   val GbifUsageKey: GbifUsageKey,
+   val json: JSON
   ):
 
   /**
    * Overloaded constructor with defaults, used when reading the input CSV file, that might be incomplete
    */
-  def this(latinNameString: String, genusString: String, familiaString: String, ordoString: String, GbifUsageKeyInt: Int) =
-    this(Binomial(latinNameString), Taxon(genusString), Taxon(familiaString), Taxon(ordoString), GbifUsageKey(GbifUsageKeyInt))
+  def this(latinNameString: String, genusString: String, familiaString: String, ordoString: String, GbifUsageKeyInt: Int, json: JSON) =
+    this(Binomial(latinNameString), Taxon(genusString), Taxon(familiaString), Taxon(ordoString), GbifUsageKey(GbifUsageKeyInt), json)
 
   def this(latinName: Binomial, genus: Taxon, familia: Taxon, ordo: Taxon) =
-    this(latinName, genus, familia, ordo, Species.DEFAULT_KEY)
+    this(latinName, genus, familia, ordo, Species.DEFAULT_KEY, "")
 
   def this(latinNameString: String, genusString: String, familiaString: String, ordoString: String) =
-    this(Binomial(latinNameString), Taxon(genusString), Taxon(familiaString), Taxon(ordoString), Species.DEFAULT_KEY)
+    this(Binomial(latinNameString), Taxon(genusString), Taxon(familiaString), Taxon(ordoString), Species.DEFAULT_KEY, "")
 
   def this(latinName: Binomial) =
-    this(latinName, Taxon.empty, Taxon.empty, Taxon.empty, Species.DEFAULT_KEY)
+    this(latinName, Taxon.empty, Taxon.empty, Taxon.empty, Species.DEFAULT_KEY, "")
 
   def this(latinNameString: String) =
-    this(Binomial(latinNameString), Taxon.empty, Taxon.empty, Taxon.empty, Species.DEFAULT_KEY)
+    this(Binomial(latinNameString), Taxon.empty, Taxon.empty, Taxon.empty, Species.DEFAULT_KEY, "")
 
   /**
    * Comparator. Two species are equal if their latinName or their GbifUsageKey are the same.
@@ -90,6 +94,7 @@ class Species(
       family:       $familia
       ordo:         $ordo
       GbifUsageKey: $GbifUsageKey
+      Gbif response: $json
        |""".stripMargin
 
 object Species:
