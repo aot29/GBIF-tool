@@ -9,7 +9,7 @@ import controllers.GbifToolController.{config, timeout}
 import errors.SpeciesValidationError
 import models.Types.{FilePath, ValidatedSpecies}
 import services.{GbifService, SpeciesCsvSink, SpeciesCsvSource, SpeciesSink, SpeciesSource, TaxonomyService}
-import utils.{GbifParser, ValidatingSpeciesParser}
+import utils.{GbifParser, Report, ValidatingSpeciesParser}
 
 import concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.{Duration, MILLISECONDS}
@@ -63,7 +63,7 @@ object GbifToolController:
    * @param params command-line parameters
    * @return Nothing
    */
-  def route(params: Seq[String]): Future[Any] =
+  def route(params: Seq[String]): Future[Report] =
     // no command given, fail immediately
     if params.isEmpty then
       Future.failed(IllegalArgumentException("No arguments provided"))
@@ -78,14 +78,14 @@ object GbifToolController:
           if args.isEmpty | args.length != 1 then 
             Future.failed(IllegalArgumentException(s"Wrong number of parameters for matchName"))
           else
-            matchName(args.head)
+            Report.from(matchName(args.head))
 
         // matchAll inputfile.csv outputfile.csv
         case command if command == "matchAll" =>
           if args.isEmpty | args.length != 2 then
             Future.failed(IllegalArgumentException(s"Wrong number of parameters for matchAll"))
           else
-            matchAll(args.head, args.last)
+            Report.from(matchAll(args.head, args.last))
 
         // unknown command detected, fail immediately
         case _ =>
@@ -104,6 +104,7 @@ object GbifToolController:
     taxonomyService.matchSpecies(species).map{ gbifResponse =>
       gbifParser.parse(gbifResponse)
     }
+
 
   /**
    * Load all the species from the input CSV file.

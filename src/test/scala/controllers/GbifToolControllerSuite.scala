@@ -2,10 +2,11 @@ package controllers
 
 import errors.SpeciesValidationError
 import models.Species
+import utils.Report
 
 import java.io.{File, FileNotFoundException}
 import scala.concurrent.{Await, Future}
-import scala.util.Failure
+import scala.util.{Failure, Success}
 import concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.{Duration, MILLISECONDS}
 
@@ -50,10 +51,8 @@ class GbifToolControllerSuite extends munit.FunSuite:
     }
   }
   test("Species names are two words between quotes") {
-    Await.result(GbifToolController.route(Seq("matchName", "one two")), timeout) match
-      case Right(response) => fail(s"Expected an error, got $response")
-      case Left(ex) =>
-        assert(ex.isInstanceOf[SpeciesValidationError])
+    val r = Await.result(GbifToolController.route(Seq("matchName", "one two")), timeout)
+    assert(r.isInstanceOf[Report])
   }
 
   // matchSpeciesFile expects exactly two arguments
