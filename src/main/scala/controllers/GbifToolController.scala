@@ -51,7 +51,7 @@ object GbifToolController:
         println(any)
       case Failure(ex) =>
         // if debug, print the exception
-        if debug then throw ex
+        if debug then println(ex)
         // otherwise print message for end-user
         else println("An error occurred. See README for instructions.")
     }

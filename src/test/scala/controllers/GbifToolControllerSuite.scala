@@ -1,6 +1,6 @@
 package controllers
 
-import errors.SpeciesValidationError
+import errors.{SpeciesUnknownError, SpeciesValidationError}
 import models.Species
 import utils.Report
 
@@ -51,8 +51,9 @@ class GbifToolControllerSuite extends munit.FunSuite:
     }
   }
   test("Species names are two words between quotes") {
-    val r = Await.result(GbifToolController.route(Seq("matchName", "one two")), timeout)
-    assert(r.isInstanceOf[Report])
+    intercept[SpeciesUnknownError] {
+      val r = Await.result(GbifToolController.route(Seq("matchName", "one two")), timeout)
+    }
   }
 
   // matchSpeciesFile expects exactly two arguments

@@ -1,5 +1,6 @@
 package utils
 
+import errors.{SpeciesUnknownError, SpeciesValidationError}
 import models.Summary
 import models.Types.ValidatedSpecies
 
@@ -21,9 +22,14 @@ object Report:
     futureObj.transformWith {
       case Success(obj) =>
         obj match
+          // matchName -> Validated Species OK -> return a string representing the species
           case Right(obj) => Future.successful(Report(obj.toString))
-          case Left(ex: String) => Future.failed(new Exception(ex))
-          case obj: Any => Future.successful(Report(obj.toString))
+          // matchName -> Validated Species FAIL -> return an exception with the message in Left
+          case Left(ex: SpeciesValidationError) => Future.failed(ex)
+          // matchAll -> Seq of ValidatedSpecies -> returns a Summary as string encapsulated in a Report
+          case obj: Summary => Future.successful(Report(obj.toString))
+      // processing failed
       case Failure(ex) => Future.failed(ex)
+      // for completeness
       case null => Future.failed(new Exception("Unknown error"))
     }
