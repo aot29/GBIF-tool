@@ -17,7 +17,7 @@ sealed trait Property
  * are considered valid names.
  * */
 case class Binomial(value: String) extends Property:
-  require(value == "Animalia" | value.matches("[a-zA-Z\\s\\.♂♀]+") & value.split(" ").length >= 2)
+  require(value == "Animalia" | value.matches("[a-zA-Z\\s\\.♂♀]+"))
   override def toString: String = value
 
 /** A taxon name contains only letters in the latin alphabet, no spaces (or is empty) */

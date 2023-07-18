@@ -34,9 +34,10 @@ class GbifParser extends ValidatingSpeciesParser:
       // species was found in GBIF
       case TaxonomicStatus.ACCEPTED =>
         val gbifKey = parseUsageKey(jsonVal).getOrElse(0)
+        val rank = parseRank(jsonVal).getOrElse("UNKNOWN") // Rank is Species, Genus, Familia, Ordo, etc
         // GBIF responded with GBIF key 1 or 0 ("Animal"), although it's accepted,
         // a validation error should be returned
-        if gbifKey == 0 | gbifKey == 1 then
+        if gbifKey == 0 | gbifKey == 1 | rank != "SPECIES" then
           Left(SpeciesUnknownError())
         else
           Right(parseAccepted(jsonVal))
@@ -104,6 +105,9 @@ class GbifParser extends ValidatingSpeciesParser:
 
   private def parseOrdo(jsonVal: JsValue): Try[String] =
     Try(jsonVal("order").as[String])
+
+  private def parseRank(jsonVal: JsValue): Try[String] =
+    Try(jsonVal("rank").as[String])
 
   private def parseUsageKey(jsonVal: JsValue): Try[Int] =
     Try (
