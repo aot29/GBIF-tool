@@ -41,7 +41,7 @@ case class GbifUsageKey(value:Int) extends Property:
 /**
  * A class representing an animal species.
  * */
-class Species(
+case class Species(
    val latinName: Binomial,
    val genus: Taxon,
    val familia: Taxon,
@@ -49,24 +49,6 @@ class Species(
    val GbifUsageKey: GbifUsageKey,
    val json: JSON
   ):
-
-  /**
-   * Overloaded constructor with defaults, used when reading the input CSV file, that might be incomplete
-   */
-  def this(latinNameString: String, genusString: String, familiaString: String, ordoString: String, GbifUsageKeyInt: Int, json: JSON) =
-    this(Binomial(latinNameString), Taxon(genusString), Taxon(familiaString), Taxon(ordoString), GbifUsageKey(GbifUsageKeyInt), json)
-
-  def this(latinName: Binomial, genus: Taxon, familia: Taxon, ordo: Taxon) =
-    this(latinName, genus, familia, ordo, Species.DEFAULT_KEY, "")
-
-  def this(latinNameString: String, genusString: String, familiaString: String, ordoString: String) =
-    this(Binomial(latinNameString), Taxon(genusString), Taxon(familiaString), Taxon(ordoString), Species.DEFAULT_KEY, "")
-
-  def this(latinName: Binomial) =
-    this(latinName, Taxon.empty, Taxon.empty, Taxon.empty, Species.DEFAULT_KEY, "")
-
-  def this(latinNameString: String) =
-    this(Binomial(latinNameString), Taxon.empty, Taxon.empty, Taxon.empty, Species.DEFAULT_KEY, "")
 
   /**
    * Comparator. Two species are equal if their latinName or their GbifUsageKey are the same.
@@ -87,7 +69,7 @@ class Species(
   /**
    * Pretty-print to the console. Skip printing the JSON.
    */
-  override def toString =
+  override def toString: String =
     s"""
       latin name:   $latinName
       genus:        $genus
@@ -99,8 +81,25 @@ class Species(
 
 object Species:
   /** The GBIF key for the animal kingdom, used as default */
-  val DEFAULT_KEY = GbifUsageKey(1)
+  val DEFAULT_KEY: GbifUsageKey = GbifUsageKey(1)
 
   /** Unknown animal */
-  val Unknown: Species = Species(Binomial("Animalia sp."), Taxon.empty, Taxon.empty, Taxon.empty)
+  val Unknown: Species = Species(Binomial("Animalia sp."))
 
+  /**
+   * Overloaded constructor with defaults, used when reading the input CSV file, that might be incomplete
+   */
+  def apply(latinNameString: String, genusString: String, familiaString: String, ordoString: String, GbifUsageKeyInt: Int, json: JSON): Species =
+    Species(Binomial(latinNameString), Taxon(genusString), Taxon(familiaString), Taxon(ordoString), GbifUsageKey(GbifUsageKeyInt), json)
+
+  def apply(latinName: Binomial, genus: Taxon, familia: Taxon, ordo: Taxon): Species =
+    Species(latinName, genus, familia, ordo, Species.DEFAULT_KEY, "")
+
+  def apply(latinNameString: String, genusString: String, familiaString: String, ordoString: String): Species =
+    Species(Binomial(latinNameString), Taxon(genusString), Taxon(familiaString), Taxon(ordoString), Species.DEFAULT_KEY, "")
+
+  def apply(latinName: Binomial): Species =
+    Species(latinName, Taxon.empty, Taxon.empty, Taxon.empty, Species.DEFAULT_KEY, "")
+
+  def apply(latinNameString: String): Species =
+    Species(Binomial(latinNameString), Taxon.empty, Taxon.empty, Taxon.empty, Species.DEFAULT_KEY, "")
