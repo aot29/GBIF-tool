@@ -58,6 +58,9 @@ case class Species(
    * @param that any object
    * @return true if equal, false if different
    */
+  // after reading https://alvinalexander.com/scala/how-to-define-equals-hashcode-methods-in-scala-object-equality/
+  // decided to not implement this, as Species is now a case class anyway
+/*
   override def equals(that: Any): Boolean =
     that match
       case that:Species =>
@@ -65,7 +68,7 @@ case class Species(
         |
         (that.GbifUsageKey == this.GbifUsageKey & that.GbifUsageKey!=Species.DEFAULT_KEY)
       case _ => false
-
+*/
   /**
    * Pretty-print to the console. Skip printing the JSON.
    */
