@@ -120,8 +120,7 @@ from the reviewers:
 - Which collections do you use? Give links to the relevant Scala source files.
   * `src/main/scala/controllers/GbifToolController.matchName` uses a map,
     `src/main/scala/controllers/GbifToolController.matchAll` uses a for-yield loop
-  * `src/main/scala/services/SpeciesCsvSource.listSpecies` uses a mutable Seq (mutableSpeciesList), that is
-    cast to an immutable set before being returned
+  * `src/main/scala/services/SpeciesCsvSource.listSpecies` uses a Seq (speciesList)
   * `src/main/scala/services/GbifService.matchSpeciesList` uses a foldLeft
   * `Seq[String]`, `Seq[JSON]` and `Seq[ValidatedSpecies]` are used throughout the project
 

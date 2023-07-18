@@ -47,9 +47,7 @@ class SpeciesCsvSource(separator: Char) extends SpeciesSource:
           if expectedHeaders.diff(headers).nonEmpty then
             Future.failed(IllegalArgumentException("File does not have correct header line"))
           else
-            // a mutable, empty, list of Species
-            var mutableSpeciesList: scala.collection.mutable.Seq[Species] = scala.collection.mutable.Seq.empty[Species]
+            var speciesList = Seq.empty[Species]
             for line <- lines.tail do
-              mutableSpeciesList = mutableSpeciesList :+ parser.parse(line)
-            // return the species list, but first cast it to an immutable list
-            Future.successful(mutableSpeciesList.toSeq)
+              speciesList = speciesList :+ parser.parse(line)
+            Future.successful(speciesList)
